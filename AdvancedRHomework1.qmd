@@ -25,7 +25,7 @@ data("economics")
 A quick view of the data set:
 
 ```{r}
-head(economics)
+kable(head(economics), caption = "First 6 rows of the economics dataset")
 ```
 
 ## Descriptive Statistics
