@@ -73,3 +73,22 @@ ggplot(annual_summary, aes(x = year)) +
 ```
 
 The plot shows that the population displays a steady and stable rise from 1967 to 2015. In contrast, unemployment shows spikes, and these spikes peak during major economic recessions. These recessions include the 1980s inflation crisis, the dot-com bubble crash, the 2008 financial crisis, and various other economic downturns during the period. In conclusion, we understand that population plays no direct role in the unemployment rate in the country. Instead, unemployment is more influenced by short-term economic shocks and recessions.
+
+```{r}
+ggplot(annual_summary, aes(x = avg_population, y = avg_unemployed)) +
+  geom_point(color = "#DA3E52") +
+  geom_smooth(method = "lm", se = FALSE, color = "#279AF1") +
+  labs(
+    title = "Relationship between US Population vs Unemployment (1967–2015)",
+    x = "Average Population (Thousands)",
+    y = "Average Unemployment (Thousands)"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
+    plot.subtitle = element_text(size = 11, hjust = 0.5, margin = margin(b = 10)),
+    axis.title.y.left = element_text(color = "#DA3E52", face = "bold"),
+    axis.title.x = element_text(color = "#279AF1", face = "bold")
+  )
+```
+The plot confirms that there is not correlation between population and Unemployment in the US between 1967 - 2015.
