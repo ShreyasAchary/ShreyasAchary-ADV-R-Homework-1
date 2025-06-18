@@ -1,0 +1,75 @@
+---
+title: "Advanced R Homework 1"
+author: "Shreyas Sadashiva Achary (24217226)"
+format: 
+  pdf:
+    geometry: top=0.5in, bottom=0.5in, left=0.8in, right=0.8in
+editor: visual
+echo: false
+---
+
+## Introduction
+
+For this Homework assignment we will be working with the ***economics*** data set which is available in the ***ggplot2*** package. The data set tracks the monthly US economic indicators starting from the year 1967.
+
+In this report we will analyze the how the increase in population affects the unemployment rate.
+
+```{r, warning=FALSE, message=FALSE}
+# Importing necessary libraries and the economics data set
+library(ggplot2)
+library(dplyr)
+library(knitr)
+data("economics")
+```
+
+A quick view of the data set:
+
+```{r}
+head(economics)
+```
+
+## Descriptive Statistics
+
+```{r}
+economics <- economics %>%
+  mutate(year = as.numeric(format(date, "%Y")))
+
+# group the dataset by year and calculate the yearly averages for population & unemployment
+annual_summary <- economics %>%
+  group_by(year) %>%
+  summarise(
+    avg_population = mean(pop),
+    avg_unemployed = mean(unemploy),
+    .groups = "drop"
+  )
+kable(head(annual_summary, 10), caption = "Average Population and Unemployment (1967–1976)")
+```
+
+From the table we understand that while the population grows at a steady rate the unemployment differs from one year to another. We can see that the unemployment was the highest between 1974 and 1976. The highest unemployment was seen in the year 1975 with an average unemployment of about 7939.583 when the average population stood at 215890.7.
+
+```{r}
+ggplot(annual_summary, aes(x = year)) +
+  geom_line(aes(y = avg_population), color = "#279AF1", linewidth = 1.2) +
+  geom_line(aes(y = avg_unemployed * 15), color = "#DA3E52", linewidth = 1, linetype = "dashed") +
+  scale_y_continuous(
+    name = "Population (Thousands)",
+    sec.axis = sec_axis(~./15, name = "Unemployed (Thousands)")
+  ) +
+  
+  labs(
+    title = "US Population vs Unemployment (1967–2015)",
+    x = "Year",
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold", size = 15, hjust = 0.5),
+    plot.subtitle = element_text(size = 11, hjust = 0.5, margin = margin(b = 10)),
+    axis.title.y.left = element_text(color = "#279AF1", face = "bold"),
+    axis.title.y.right = element_text(color = "#DA3E52", face = "bold"),
+    axis.title.x = element_text(face = "bold"),
+    legend.position = "none"
+  )
+
+```
+
+The plot shows that the population displays a steady and stable rise from 1967 to 2015. In contrast, unemployment shows spikes, and these spikes peak during major economic recessions. These recessions include the 1980s inflation crisis, the dot-com bubble crash, the 2008 financial crisis, and various other economic downturns during the period. In conclusion, we understand that population plays no direct role in the unemployment rate in the country. Instead, unemployment is more influenced by short-term economic shocks and recessions.
